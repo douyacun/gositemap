@@ -26,6 +26,7 @@ const (
 )
 
 type url struct {
+	*base
 	XMLName    xml.Name   `xml:"url"`
 	Loc        string     `xml:"loc"`
 	Lastmod    string     `xml:"lastmod,omitempty"`
@@ -36,6 +37,7 @@ type url struct {
 
 func NewUrl() *url {
 	return &url{
+		base:       &base{},
 		Loc:        "",
 		Lastmod:    "",
 		Changefreq: "",
@@ -44,34 +46,45 @@ func NewUrl() *url {
 }
 
 // 网址
-func (u *url) SetLoc(loc string) {
+func (u *url) SetLoc(loc string) *url {
 	u.Loc = loc
+	return u
 }
 
 // 最后一次修改时间
-func (u *url) SetLastmod(lastMod time.Time) {
+func (u *url) SetLastmod(lastMod time.Time) *url {
 	u.Lastmod = lastMod.String()
+	return u
 }
 
 // 更新频率
-func (u *url) SetChangefreq(freq changefreq) {
+func (u *url) SetChangefreq(freq changefreq) *url {
 	u.Changefreq = freq
+	return u
 }
 
 // 网页优先级
-func (u *url) SetPriority(priority float32) {
+func (u *url) SetPriority(priority float32) *url {
 	if priority < 0 || priority > 1 {
 		panic(InvalidPriorityError{"Valid values range from 0.0 to 1.0"})
 	}
 	u.Priority = priority
+	return u
 }
 
 // 对于单个网页上的多个视频，为该网页创建一个 <loc> 标记，并为该网页上的每个视频创建一个子级 <video> 元素。
-func (u *url) AppendVideo(video Video) {
+func (u *url) AppendVideo(video *video) {
+	u.setNs(VideoXmlNS)
 	u.Token = append(u.Token, video)
 }
 
 // 对于单个网页上的多个图片，每个 <url> 标记最多可包含 1000 个 <image:image> 标记。
-func (u *url) AppendImage(image Image) {
+func (u *url) AppendImage(image *image) {
+	u.setNs(ImageXmlNS)
 	u.Token = append(u.Token, image)
+}
+
+func (u *url) AppendNews(news *news) {
+	u.setNs(NewsXmlNS)
+	u.Token = append(u.Token, news)
 }

@@ -1,5 +1,10 @@
 package gositemap
 
+import (
+	"os"
+	"path"
+)
+
 type options struct {
 	defaultHost string
 	publicPath  string
@@ -9,16 +14,17 @@ type options struct {
 }
 
 func NewOptions() *options {
+	pwd, _ := os.Getwd()
 	return &options{
 		defaultHost: "http://www.example.com",
-		publicPath:  "",
-		filename:    "sitemap",
+		publicPath:  pwd,
+		filename:    "sitemap.xml",
 		compress:    true,
 		pretty:      false,
 	}
 }
 
-func (o *options) SetDefaultHost(host string) {
+func (o *options) SetDefaultHost(host string)  {
 	o.defaultHost = host
 }
 
@@ -27,6 +33,9 @@ func (o *options) SetPublicPath(path string) {
 }
 
 func (o *options) SetFilename(filename string) {
+	if path.Ext(filename) != ".xml" {
+		filename = filename + ".xml"
+	}
 	o.filename = filename
 }
 
