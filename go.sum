@@ -1,0 +1,6 @@
+github.com/beevik/etree v1.1.0 h1:T0xke/WvNtMoCqgzPhkX2r4rjY3GDZFi+FjpRZY2Jbs=
+github.com/beevik/etree v1.1.0/go.mod h1:r8Aw8JqVegEf0w2fDnATrX9VpkMcyFeM0FhwO62wh+A=
+github.com/fatih/structs v1.1.0 h1:Q7juDM0QtcnhCpeyLGQKyg4TOIghuNXrkL32pHAUMxo=
+github.com/fatih/structs v1.1.0/go.mod h1:9NiDSp5zOcgEDl+j00MP/WkGVPOlPRLejGD8Ga6PJ7M=
+github.com/ikeikeikeike/go-sitemap-generator v2.0.1+incompatible h1:Ry3DcY2hILVzZiaE3IOYyU5/oSTfgsFmOHuPg+WfYX4=
+github.com/ikeikeikeike/go-sitemap-generator v2.0.1+incompatible/go.mod h1:QI+zWsz6yQyxkG9LWNcnu0f7aiAE5tPdsZOsICgmd1c=
