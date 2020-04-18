@@ -9,6 +9,8 @@ import (
 
 func TestSiteMap_ToXml(t *testing.T) {
 	st := NewSiteMap()
+	st.SetPretty(true)
+
 	url := NewUrl()
 	url.SetLoc("https://www.douyacun.com/")
 	url.SetLastmod(time.Now())
