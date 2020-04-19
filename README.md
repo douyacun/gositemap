@@ -1,13 +1,19 @@
+
 # gositemap
 
 [sitemap 协议](https://www.sitemaps.org/protocol.html)
 
+# Installation
+```
+import "github.com/douyacun/gositemap"
+```
+
 go语言实现的sitemap生成工具
 ```go
-st := NewSiteMap()
+st := gositemap.NewSiteMap()
 st.SetPretty(true)
 
-url := NewUrl()
+url := gositemap.NewUrl()
 url.SetLoc("https://www.douyacun.com/")
 url.SetLastmod(time.Now())
 url.SetChangefreq(Daily)
@@ -34,11 +40,14 @@ fmt.Printf("%s", bt)
 ```
 
 # Features
-- [x]  [Image sitemap 图片](#image-sitemap)
-- [x]  [News sitemap 新闻](#news-sitemap)
-- [x]  [Video sitemap 视频](#video-sitemap)
-- [x]  [File storage 文件存储](#file-storage)
-- [x]  [Sitemap index](#sitemap-index)
+- [gositemap](#gositemap)
+- [Installation](#installation)
+- [Features](#features)
+- [Image sitemap](#image-sitemap)
+- [News sitemap](#news-sitemap)
+- [Video sitemap](#video-sitemap)
+- [file storage](#file-storage)
+- [Sitemap index](#sitemap-index)
 
 # Image sitemap
 
@@ -293,7 +302,7 @@ if err != nil {
   return
 }
 mapIndex.Append("https://www.douyacun.com/" + st1Filename)
-filename, err := mapIndex.Storage("/tmp/sitemap_index.xml")
+filename, err := mapIndex.Storage("/Users/liuning/Documents/github/gositemap/sitemap_index.xml")
 if err != nil {
   fmt.Printf("%v", err)
   return
@@ -302,5 +311,4 @@ fmt.Printf("%v", filename)
 ```
 
 使用sitemap_index时，建议每个单独的sietmap comporess压缩成.gz文件，`SetCompress`后会自动添加 `.gz`后缀名 ,  生成`sitemap1.xml.gz` 和 `sitemap_index.xml`
-
 
