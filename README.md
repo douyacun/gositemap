@@ -38,7 +38,7 @@ fmt.Printf("%s", bt)
 - [x]  [News sitemap 新闻](#news-sitemap)
 - [x]  [Video sitemap 视频](#video-sitemap)
 - [x]  [File storage 文件存储](#file-storage)
-- [x]  Sitemap index
+- [x]  [Sitemap index](#sitemap-index)
 
 # Image sitemap
 
