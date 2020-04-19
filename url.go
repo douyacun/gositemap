@@ -53,7 +53,7 @@ func (u *url) SetLoc(loc string) *url {
 
 // 最后一次修改时间
 func (u *url) SetLastmod(lastMod time.Time) *url {
-	u.Lastmod = lastMod.String()
+	u.Lastmod = lastMod.Format(time.RFC3339)
 	return u
 }
 

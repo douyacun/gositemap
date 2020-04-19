@@ -19,14 +19,15 @@ func TestSiteMap_ToXml(t *testing.T) {
 	st.AppendUrl(url)
 	bt, err := st.ToXml()
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		return
 	}
-	log.Printf("%s", bt)
+	fmt.Printf("%s", bt)
 }
 
 func TestNewVideo(t *testing.T) {
 	st := NewSiteMap()
+	st.SetPretty(true)
 	url := NewUrl()
 	url.Loc = "https://www.douyacun.com"
 
@@ -60,6 +61,7 @@ func TestNewVideo(t *testing.T) {
 
 func TestNewImage(t *testing.T) {
 	st := NewSiteMap()
+	st.SetPretty(true)
 	url := NewUrl()
 	url.SetLoc("https://www.douyacun.com/show_image")
 	// 注意这里url.SetLoc设置网页的网址
@@ -110,7 +112,7 @@ func TestSitemap_Storage(t *testing.T) {
 	st := NewSiteMap()
 	st.SetDefaultHost("https://www.douyacun.com")
 	st.SetPretty(true)
-	st.SetMaxLinks(2)
+	//st.SetMaxLinks(2)
 	st.SetPublicPath("/Users/liuning/Documents/github/gositemap")
 
 	url := NewUrl()
@@ -121,21 +123,21 @@ func TestSitemap_Storage(t *testing.T) {
 		SetPublicationDate(time.Now()))
 	st.AppendUrl(url)
 
-	url = NewUrl().SetLoc("https://www.douyacun.com/business/article56.html")
-
-	url.AppendNews(NewNews().SetName("《示例时报》").
-		SetTitle("公司 A 和 C 正在进行合并谈判").
-		SetLanguage("zh-cn").
-		SetPublicationDate(time.Now()))
-	st.AppendUrl(url)
-
-	url = NewUrl().SetLoc("https://www.douyacun.com/business/article57.html")
-
-	url.AppendNews(NewNews().SetName("《示例时报》").
-		SetTitle("公司 A 和 C 正在进行合并谈判").
-		SetLanguage("zh-cn").
-		SetPublicationDate(time.Now()))
-	st.AppendUrl(url)
+	//url = NewUrl().SetLoc("https://www.douyacun.com/business/article56.html")
+	//
+	//url.AppendNews(NewNews().SetName("《示例时报》").
+	//	SetTitle("公司 A 和 C 正在进行合并谈判").
+	//	SetLanguage("zh-cn").
+	//	SetPublicationDate(time.Now()))
+	//st.AppendUrl(url)
+	//
+	//url = NewUrl().SetLoc("https://www.douyacun.com/business/article57.html")
+	//
+	//url.AppendNews(NewNews().SetName("《示例时报》").
+	//	SetTitle("公司 A 和 C 正在进行合并谈判").
+	//	SetLanguage("zh-cn").
+	//	SetPublicationDate(time.Now()))
+	//st.AppendUrl(url)
 
 	path, err := st.Storage()
 	if err != nil {
@@ -143,4 +145,41 @@ func TestSitemap_Storage(t *testing.T) {
 		return
 	}
 	fmt.Println(path)
+}
+
+func TestNewSiteMapIndex(t *testing.T) {
+	mapIndex := NewSiteMapIndex()
+
+	st1 := NewSiteMap()
+	st1.SetPretty(true)
+	st1.SetFilename("sitemap1")
+	st1.SetCompress(true)
+
+	url := NewUrl()
+	url.SetLoc("https://www.douyacun.com/business/article55.html")
+	url.AppendNews(NewNews().SetName("《示例时报》").
+		SetTitle("公司 A 和 B 正在进行合并谈判").
+		SetLanguage("zh-cn").
+		SetPublicationDate(time.Now()))
+	st1.AppendUrl(url)
+
+	url = NewUrl().SetLoc("https://www.douyacun.com/business/article56.html")
+
+	url.AppendNews(NewNews().SetName("《示例时报》").
+		SetTitle("公司 A 和 C 正在进行合并谈判").
+		SetLanguage("zh-cn").
+		SetPublicationDate(time.Now()))
+	st1.AppendUrl(url)
+	st1Filename, err := st1.Storage()
+	if err != nil {
+		fmt.Printf("%v", err)
+		return
+	}
+	mapIndex.Append("https://www.douyacun.com/" + st1Filename)
+	filename, err := mapIndex.Storage("/Users/liuning/Documents/github/gositemap/sitemap_index.xml")
+	if err != nil {
+		fmt.Printf("%v", err)
+		return
+	}
+	fmt.Printf("%v", filename)
 }

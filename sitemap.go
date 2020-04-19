@@ -4,14 +4,16 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/xml"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 )
 
-
+var (
+	TooMuchLinksError = errors.New("单个sitemap文件过多")
+)
 
 type urlSet struct {
 	*base
@@ -54,6 +56,9 @@ func (s *sitemap) ToXml() ([]byte, error) {
 	if NewsXmlNS&s.xmlns == NewsXmlNS {
 		s.urlSet.XMLNSNews = "http://www.google.com/schemas/sitemap-news/0.9"
 	}
+	if len(s.urlSet.Token) > s.options.maxLinks {
+		return nil, TooMuchLinksError
+	}
 	var (
 		data []byte
 		err  error
@@ -73,52 +78,34 @@ func (s *sitemap) ToXml() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (s *sitemap) Storage() (string, error) {
-	// 5w个连接生成一个文件
-	length := len(s.Token)
-	if length < MaxSitemapLinks {
-		data, err := s.ToXml()
-		if err != nil {
-			return "", err
-		}
-		if err = os.MkdirAll(s.publicPath, 0755); err != nil {
-			return "", err
-		}
-		return s.filename, ioutil.WriteFile(path.Join(s.publicPath, s.filename), data, 0666)
-	} else {
-		index := 1
+// filename 生成sitemap文件名
+func (s *sitemap) Storage() (filename string, err error) {
+	var (
+		data []byte
+	)
+	data, err = s.ToXml()
+	if err != nil {
+		return
+	}
+	if err = os.MkdirAll(s.publicPath, 0755); err != nil {
+		return
+	}
+	if s.compress {
 		basename := strings.TrimRight(s.filename, path.Ext(s.filename))
-		si := NewSiteMapIndex()
-		host := strings.TrimRight(s.defaultHost, "/")
-		publicPath := strings.TrimRight(s.publicPath, "/")
-		for i := 0; i < len(s.Token); i += MaxSitemapLinks {
-			st := NewSiteMap()
-			st.options = s.options
-			st.Token = s.Token[i : i+MaxSitemapLinks]
-			data, err := st.ToXml()
-			filename := fmt.Sprintf("%s%d.xml.gz", basename, index)
-			fileAbsPath := path.Join(s.publicPath, filename)
-			fd, err := os.OpenFile(fileAbsPath, os.O_CREATE|os.O_WRONLY, 0666)
-			if err != nil {
-				return "", err
-			}
+		filename = basename + ".xml.gz"
+		if fd, err := os.OpenFile(path.Join(s.publicPath, filename), os.O_WRONLY|os.O_CREATE, 0666); err != nil {
+			return "", err
+		} else {
 			gw := gzip.NewWriter(fd)
 			if _, err := gw.Write(data); err != nil {
 				return "", err
 			}
-			_ = gw.Close()
 			_ = fd.Close()
-			index++
-			si.Append(NewMap(host + "/" + filename))
+			_ = gw.Close()
+			return filename, nil
 		}
-		data, err := si.ToXml()
-		if err != nil {
-			return "", err
-		}
-		filename := basename + "_index.xml"
-		file := publicPath + "/" + filename
-		err = ioutil.WriteFile(file, data, 0666)
-		return file, err
+	} else {
+		return s.filename, ioutil.WriteFile(path.Join(s.publicPath, s.filename), data, 0666)
 	}
 }
 
@@ -134,11 +121,14 @@ type siteMapIndex struct {
 
 func NewSiteMapIndex() *siteMapIndex {
 	return &siteMapIndex{
-		SiteMap: make([]Map, 1),
+		SiteMap: make([]Map, 0),
 	}
 }
 
-func (s *siteMapIndex) Append(m Map) {
+func (s *siteMapIndex) Append(loc string) {
+	m := Map{
+		Loc: loc,
+	}
 	s.SiteMap = append(s.SiteMap, m)
 }
 
@@ -157,8 +147,15 @@ func (s *siteMapIndex) ToXml() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func NewMap(loc string) Map {
-	return Map{
-		Loc: loc,
+func (s *siteMapIndex) Storage(filepath string) (filename string, err error) {
+	if path.Ext(filepath) != ".xml" {
+		return "", errors.New("建议以.xml作为文件扩展名")
 	}
+	var data []byte
+	if data, err = s.ToXml(); err != nil {
+		return
+	}
+	err = ioutil.WriteFile(filepath, data, 0666)
+	filename = path.Base(filepath)
+	return
 }
