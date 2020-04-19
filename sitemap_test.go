@@ -110,6 +110,7 @@ func TestSitemap_Storage(t *testing.T) {
 	st := NewSiteMap()
 	st.SetDefaultHost("https://www.douyacun.com")
 	st.SetPretty(true)
+	st.SetMaxLinks(2)
 	st.SetPublicPath("/Users/liuning/Documents/github/gositemap")
 
 	url := NewUrl()

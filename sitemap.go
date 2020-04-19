@@ -11,18 +11,7 @@ import (
 	"strings"
 )
 
-const (
-	// MaxSitemapFiles defines max sitemap links per index file
-	MaxSitemapFiles = 50000
-	// MaxSitemapLinks defines max links per sitemap
-	MaxSitemapLinks = 2
-	// MaxSitemapImages defines max images per url
-	MaxSitemapImages = 1000
-	// MaxSitemapNews defines max news sitemap per index_file
-	MaxSitemapNews = 1000
-	// MaxSitemapFilesize defines file size for sitemap.
-	MaxSitemapFilesize = 50000000 // bytes
-)
+
 
 type urlSet struct {
 	*base

@@ -5,12 +5,18 @@ import (
 	"path"
 )
 
+const (
+	// MaxSitemapLinks defines max links per sitemap
+	MaxSitemapLinks = 50000
+)
+
 type options struct {
 	defaultHost string
 	publicPath  string
 	filename    string
 	compress    bool
 	pretty      bool
+	maxLinks    int
 }
 
 func NewOptions() *options {
@@ -21,10 +27,11 @@ func NewOptions() *options {
 		filename:    "sitemap.xml",
 		compress:    true,
 		pretty:      false,
+		maxLinks:    MaxSitemapLinks,
 	}
 }
 
-func (o *options) SetDefaultHost(host string)  {
+func (o *options) SetDefaultHost(host string) {
 	o.defaultHost = host
 }
 
@@ -45,4 +52,10 @@ func (o *options) SetCompress(compress bool) {
 
 func (o *options) SetPretty(pretty bool) {
 	o.pretty = pretty
+}
+
+func (o *options) SetMaxLinks(max int) {
+	if max < MaxSitemapLinks && max > 0 {
+		o.maxLinks = max
+	}
 }
