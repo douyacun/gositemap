@@ -293,7 +293,7 @@ if err != nil {
   return
 }
 mapIndex.Append("https://www.douyacun.com/" + st1Filename)
-filename, err := mapIndex.Storage("/Users/liuning/Documents/github/gositemap/sitemap_index.xml")
+filename, err := mapIndex.Storage("/tmp/sitemap_index.xml")
 if err != nil {
   fmt.Printf("%v", err)
   return
