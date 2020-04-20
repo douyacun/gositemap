@@ -25,7 +25,7 @@ func NewOptions() *options {
 		defaultHost: "http://www.example.com",
 		publicPath:  pwd,
 		filename:    "sitemap.xml",
-		compress:    true,
+		compress:    false,
 		pretty:      false,
 		maxLinks:    MaxSitemapLinks,
 	}
