@@ -10,12 +10,11 @@ import (
 func TestSiteMap_ToXml(t *testing.T) {
 	st := NewSiteMap()
 	st.SetPretty(true)
-
 	url := NewUrl()
 	url.SetLoc("https://www.douyacun.com/")
 	url.SetLastmod(time.Now())
 	url.SetChangefreq(Daily)
-	url.SetPriority(1)
+	url.SetPriority(float64(3.234) / float64(10))
 	st.AppendUrl(url)
 	bt, err := st.ToXml()
 	if err != nil {

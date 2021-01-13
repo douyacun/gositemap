@@ -2,6 +2,7 @@ package gositemap
 
 import (
 	"encoding/xml"
+	"fmt"
 	"time"
 )
 
@@ -25,13 +26,20 @@ const (
 	Never   ChangeFreq = "never"
 )
 
+type po float64
+
+func (f po) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+	s := fmt.Sprintf("%.6f", f)
+	return xml.Attr{Name: name, Value: s}, nil
+}
+
 type url struct {
 	*base
 	XMLName    xml.Name   `xml:"url"`
 	Loc        string     `xml:"loc"`
-	Lastmod    string     `xml:"lastmod,omitempty"`
-	Changefreq ChangeFreq `xml:"ChangeFreq,omitempty"`
-	Priority   float64    `xml:"priority,omitempty"`
+	LastMod    string     `xml:"lastmod,omitempty"`
+	ChangeFreq ChangeFreq `xml:"changefreq,omitempty"`
+	Priority   po         `xml:"priority,omitempty"`
 	Token      []xml.Token
 }
 
@@ -39,8 +47,8 @@ func NewUrl() *url {
 	return &url{
 		base:       &base{},
 		Loc:        "",
-		Lastmod:    "",
-		Changefreq: "",
+		LastMod:    "",
+		ChangeFreq: "",
 		Priority:   0,
 	}
 }
@@ -53,13 +61,13 @@ func (u *url) SetLoc(loc string) *url {
 
 // 最后一次修改时间
 func (u *url) SetLastmod(lastMod time.Time) *url {
-	u.Lastmod = lastMod.Format(time.RFC3339)
+	u.LastMod = lastMod.Format(time.RFC3339)
 	return u
 }
 
 // 更新频率
 func (u *url) SetChangefreq(freq ChangeFreq) *url {
-	u.Changefreq = freq
+	u.ChangeFreq = freq
 	return u
 }
 
@@ -68,7 +76,7 @@ func (u *url) SetPriority(priority float64) *url {
 	if priority < 0 || priority > 1 {
 		panic(InvalidPriorityError{"Valid values range from 0.0 to 1.0"})
 	}
-	u.Priority = priority
+	u.Priority = po(priority)
 	return u
 }
 
