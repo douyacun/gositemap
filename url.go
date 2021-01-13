@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type changefreq string
+type ChangeFreq string
 
 type InvalidPriorityError struct {
 	msg string
@@ -16,13 +16,13 @@ func (e *InvalidPriorityError) Error() string {
 }
 
 const (
-	Always  changefreq = "always"
-	Hourly  changefreq = "hourly"
-	Daily   changefreq = "daily"
-	Weekly  changefreq = "weekly"
-	Monthly changefreq = "monthly"
-	Yearly  changefreq = "yearly"
-	Never   changefreq = "never"
+	Always  ChangeFreq = "always"
+	Hourly  ChangeFreq = "hourly"
+	Daily   ChangeFreq = "daily"
+	Weekly  ChangeFreq = "weekly"
+	Monthly ChangeFreq = "monthly"
+	Yearly  ChangeFreq = "yearly"
+	Never   ChangeFreq = "never"
 )
 
 type url struct {
@@ -30,8 +30,8 @@ type url struct {
 	XMLName    xml.Name   `xml:"url"`
 	Loc        string     `xml:"loc"`
 	Lastmod    string     `xml:"lastmod,omitempty"`
-	Changefreq changefreq `xml:"changefreq,omitempty"`
-	Priority   float32    `xml:"priority,omitempty"`
+	Changefreq ChangeFreq `xml:"ChangeFreq,omitempty"`
+	Priority   float64    `xml:"priority,omitempty"`
 	Token      []xml.Token
 }
 
@@ -58,13 +58,13 @@ func (u *url) SetLastmod(lastMod time.Time) *url {
 }
 
 // 更新频率
-func (u *url) SetChangefreq(freq changefreq) *url {
+func (u *url) SetChangefreq(freq ChangeFreq) *url {
 	u.Changefreq = freq
 	return u
 }
 
 // 网页优先级
-func (u *url) SetPriority(priority float32) *url {
+func (u *url) SetPriority(priority float64) *url {
 	if priority < 0 || priority > 1 {
 		panic(InvalidPriorityError{"Valid values range from 0.0 to 1.0"})
 	}
