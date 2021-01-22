@@ -2,6 +2,16 @@
 
 [sitemap 协议](https://www.sitemaps.org/protocol.html)
 
+Sitemap 协议: https://www.sitemaps.org/protocol.html
+
+博客: [https://www.douyacun.com](https://www.douyacun.com)
+
+博客 sitemap: [https://www.douyacun.com/sitemap.xml](https://www.douyacun.com/sitemap.xml)
+
+Github: [https://github.com/douyacun/gositemap](https://github.com/douyacun/gositemap)
+
+pkg.go.dev: [https://pkg.go.dev/github.com/douyacun/gositemap](https://pkg.go.dev/github.com/douyacun/gositemap)
+
 ### Installation
 
 ```
@@ -311,6 +321,8 @@ fmt.Printf("%v", filename)
 
 使用sitemap_index时，建议每个单独的sietmap comporess压缩成.gz文件，`SetCompress`后会自动添加 `.gz`后缀名 ,  生成`sitemap1.xml.gz` 和 `sitemap_index.xml`
 
-### Documentation
+# LICENSE
 
-[Api Reference](https://pkg.go.dev/github.com/douyacun/gositemap?tab=doc)
+MIT@[douyacun](https://github.com/douyacun).
+
+![douyacun](../assert/douyacun_qrcode.jpg)
