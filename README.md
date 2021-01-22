@@ -325,4 +325,4 @@ fmt.Printf("%v", filename)
 
 MIT@[douyacun](https://github.com/douyacun).
 
-![douyacun](../assert/douyacun_qrcode.jpg)
+![douyacun](./assert/douyacun_qrcode.jpg)
